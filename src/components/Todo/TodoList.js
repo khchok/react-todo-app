@@ -1,16 +1,27 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Fab, FormLabel, Skeleton } from "@mui/material";
+import {
+  Box,
+  Button,
+  Fab,
+  FormLabel,
+  IconButton,
+  Skeleton,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import AddTodo from "./AddTodo";
 import "./TodoList.css";
 import { useDispatch, useSelector } from "react-redux";
 import { todoActions } from "../../store/todo-slice";
+import { getTodos } from "../../store/todo-actions";
 
 const TodoList = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {
     var timeout = setTimeout(() => {
@@ -22,17 +33,21 @@ const TodoList = () => {
     };
   }, []);
 
+  useEffect(() => {
+    dispatch(getTodos());
+  }, [dispatch]);
+
   const todoItems = useSelector((store) => store.todo.todoItems);
   const hasItem = todoItems?.length > 0;
   const columns = [
-    { field: "id", headerName: "Id", width: 150 },
-    { field: "title", headerName: "Title", width: 150 },
+    { field: "title", headerName: "Title", width: 300 },
     { field: "deadline", headerName: "Deadline", width: 150 },
     { field: "priority", headerName: "Priority", width: 150 },
+    { field: "status", headerName: "Status", width: 150 },
   ];
 
   const selectionChangedHandler = (ids) => {
-    console.log(ids);
+    setSelectedIds(ids);
   };
 
   const onFabClickHandler = () => {
@@ -41,6 +56,14 @@ const TodoList = () => {
 
   const onAddTodoCloseHandler = () => {
     setOpen(false);
+  };
+
+  const onDeleteHandler = () => {
+    dispatch(todoActions.removeTodo(selectedIds));
+  };
+
+  const onCompleteHandler = () => {
+    dispatch(todoActions.completeTodo(selectedIds));
   };
 
   return (
@@ -58,6 +81,12 @@ const TodoList = () => {
             onSelectionModelChange={selectionChangedHandler}
             getRowClassName={(param) => `todo-${param.row.status}`}
           />
+          <IconButton onClick={onDeleteHandler}>
+            <DeleteIcon fontSize="large" color="primary" />
+          </IconButton>
+          <IconButton onClick={onCompleteHandler}>
+            <AssignmentTurnedInIcon fontSize="large" color="primary" />
+          </IconButton>
           <Fab
             color="primary"
             aria-label="add"

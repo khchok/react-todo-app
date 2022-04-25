@@ -3,6 +3,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { todoActions } from "../../store/todo-slice";
+import { postTodos } from "../../store/todo-actions";
 import AppDialog from "../UI/AppDialog";
 import Moment from "moment";
 
@@ -26,15 +27,23 @@ const AddTodo = (props) => {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    dispatch(
-      todoActions.addTodo({
-        id: Math.random(),
-        title: titleRef.current.value,
-        deadline: deadlineRef.current.value,
-        priority: priorityVal,
-        status: "Active",
-      })
-    );
+    let todo = {
+      id: Math.random().toFixed(3),
+      title: titleRef.current.value,
+      deadline: deadlineRef.current.value,
+      priority: priorityVal,
+      status: "Active",
+    };
+    dispatch(postTodos(todo));
+    // dispatch(
+    //   todoActions.addTodo({
+    //     id: Math.random().toFixed(3),
+    //     title: titleRef.current.value,
+    //     deadline: deadlineRef.current.value,
+    //     priority: priorityVal,
+    //     status: "Active",
+    //   })
+    // );
     props.onClose();
   };
   return (
@@ -69,7 +78,7 @@ const AddTodo = (props) => {
           <Typography gutterBottom>Priority</Typography>
           <Slider
             value={priorityVal}
-            onChange={(e,val) => {
+            onChange={(e, val) => {
               setPriorityVal(val);
             }}
             marks={marks}

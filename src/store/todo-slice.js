@@ -6,21 +6,27 @@ const todoSlice = createSlice({
     todoItems: [],
   },
   reducers: {
+    fetchTodo(state,action){
+      state.todoItems.push(...action.payload);
+    },
     addTodo(state, action) {
       state.todoItems.push(action.payload);
     },
     removeTodo(state, action) {
-      const id = action.payload;
-      state.todoItems.filter((item) => item.id !== id);
+      const idArr = action.payload;
+      state.todoItems = state.todoItems.filter(
+        (item) => !idArr.includes(item.id)
+      );
     },
     completeTodo(state, action) {
-      const existingTodo = state.todoItems.find(
-        (item) => item.id === action.payload
-      );
-      existingTodo.status = "Completed";
+      const idArr = action.payload;
+      idArr.forEach((id) => {
+        const existingTodo = state.todoItems.find((item) => item.id === id);
+        existingTodo.status = "Completed";
+      });
     },
   },
 });
 
 export const todoActions = todoSlice.actions;
-export default todoSlice
+export default todoSlice;
