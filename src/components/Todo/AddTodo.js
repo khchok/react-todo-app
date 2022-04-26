@@ -2,7 +2,6 @@ import { TextField, Button, Grid, Slider, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { todoActions } from "../../store/todo-slice";
 import { postTodos } from "../../store/todo-actions";
 import AppDialog from "../UI/AppDialog";
 import Moment from "moment";
@@ -35,15 +34,6 @@ const AddTodo = (props) => {
       status: "Active",
     };
     dispatch(postTodos(todo));
-    // dispatch(
-    //   todoActions.addTodo({
-    //     id: Math.random().toFixed(3),
-    //     title: titleRef.current.value,
-    //     deadline: deadlineRef.current.value,
-    //     priority: priorityVal,
-    //     status: "Active",
-    //   })
-    // );
     props.onClose();
   };
   return (

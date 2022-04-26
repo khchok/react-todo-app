@@ -3,32 +3,35 @@ import { todoActions } from "./todo-slice";
 
 export const getTodos = () => {
   return (dispatch) => {
-    axios
-      .get(
-        `https://react-http-bbe1c-default-rtdb.asia-southeast1.firebasedatabase.app/todo.json`
-      )
-      .then((res) => {
-        const todos = res.data;
-        const array = [];
-        Object.keys(todos).forEach((key) => {         
-          let inner =  todos[key];
-          array.push({ ...inner });
-        });
-        
-        dispatch(todoActions.fetchTodo(array ?? []));
-      });
+    axios.get(`http://localhost:8000/todo`).then((res) => {
+      const array = res.data;
+      dispatch(todoActions.fetchTodo(array ?? []));
+    });
   };
 };
 
 export const postTodos = (todo) => {
   return (dispatch) => {
-    axios
-      .post(
-        `https://react-http-bbe1c-default-rtdb.asia-southeast1.firebasedatabase.app/todo.json`,
-        todo
-      )
-      .then((res) => {
-        dispatch(todoActions.addTodo(todo));
-      });
+    axios.post(`http://localhost:8000/todo`, todo).then((res) => {
+      dispatch(todoActions.addTodo(todo));
+    });
+  };
+};
+
+
+export const completeTodo = (ids) => {
+  return (dispatch) => {
+    axios.put(`http://localhost:8000/todo`, ids).then((res) => {
+      dispatch(todoActions.completeTodo(ids));
+    });
+  };
+};
+
+
+export const deleteTodo = (ids) => {
+  return (dispatch) => {
+    axios.delete(`http://localhost:8000/todo/${ids.join(',')}`).then((res) => {
+      dispatch(todoActions.removeTodo(ids));
+    });
   };
 };

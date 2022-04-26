@@ -14,8 +14,7 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import AddTodo from "./AddTodo";
 import "./TodoList.css";
 import { useDispatch, useSelector } from "react-redux";
-import { todoActions } from "../../store/todo-slice";
-import { getTodos } from "../../store/todo-actions";
+import { getTodos, completeTodo,deleteTodo } from "../../store/todo-actions";
 
 const TodoList = () => {
   const dispatch = useDispatch();
@@ -59,11 +58,11 @@ const TodoList = () => {
   };
 
   const onDeleteHandler = () => {
-    dispatch(todoActions.removeTodo(selectedIds));
+    dispatch(deleteTodo(selectedIds));
   };
 
   const onCompleteHandler = () => {
-    dispatch(todoActions.completeTodo(selectedIds));
+    dispatch(completeTodo(selectedIds));
   };
 
   return (
